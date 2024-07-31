@@ -39,9 +39,6 @@ class MenuStart(SceneState):
 
         self._invalid_connections = []
 
-        # Turn off button LED
-        # led_controller.set_button_color((0, 0, 0))
-
         # draw separator
         palette = displayio.Palette(1)
         palette[0] = 0xFFFFFF        
@@ -142,7 +139,9 @@ class MenuStart(SceneState):
 
             # Remove outdated invalid connections.
             if connections_count < last_connections_count:
+                device.audio_controller.eighties_dystopia.skip_to_next_note()
                 device.audio_controller.play_disconnection_sfx()
+
                 removed_connections = [i for i in last_connections if i not in connections]
                 # print("connection(s) removed:", removed_connections)
 
@@ -159,6 +158,7 @@ class MenuStart(SceneState):
 
                 if connections_count == 0:
                     device.audio_controller.play_disconnection_sfx()
+                    device.audio_controller.eighties_dystopia.skip_to_next_note()
                     self._show_menu()
 
             # If a new connection is detected, and there are currently invalid connections,
@@ -176,6 +176,7 @@ class MenuStart(SceneState):
                         # Add new connections to the invalid connections list
                         self._invalid_connections.append(new_connection)
                         device.audio_controller.play_connection_sfx()
+                        device.audio_controller.eighties_dystopia.skip_to_next_note()
                     else:
                         if element_exists(new_connection, in_list=self._menu_connections):
                             menu_index = self._menu_connections.index(new_connection)
@@ -257,6 +258,7 @@ class MenuStart(SceneState):
         device = self.device
 
         device.audio_controller.play_connection_sfx()
+        device.audio_controller.eighties_dystopia.skip_to_next_note()
 
         sb_renderer = self.device.display_controller.switchboard_renderer
         sb_renderer.hide_labels = True
