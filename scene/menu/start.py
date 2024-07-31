@@ -157,8 +157,6 @@ class MenuStart(SceneState):
                         self._invalid_connections.remove(removed)
 
                 if connections_count == 0:
-                    device.audio_controller.play_disconnection_sfx()
-                    device.audio_controller.eighties_dystopia.skip_to_next_note()
                     self._show_menu()
 
             # If a new connection is detected, and there are currently invalid connections,
