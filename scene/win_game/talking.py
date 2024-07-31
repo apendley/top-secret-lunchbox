@@ -55,12 +55,10 @@ class WinGameTalking(SceneState):
 
         # Play audio clip.
         # Generated from the 'say' command on the terminal of my MacBook.
-        audio_controller.play_wave_file("audio/who_is_this.wav")        
+        audio_controller.play_wave_file("audio/who_is_this.wav")   
+        self._draw_leds()     
 
     def update(self, dt):
-        device = self.device
-        led_controller = device.led_controller
-
         # Update events
         self._event_timer -= dt
 
@@ -82,16 +80,21 @@ class WinGameTalking(SceneState):
                 return
 
         # Update LEDs
-        top_led = map_range(self._led_level, 0, self.LED_MAX_LEVEL, 0, 5)
-
-        led_controller.fill_switchboard_color((0, 0, 0))
-
-        for i in range(0, top_led):
-            led_controller.set_switchboard_color(4 - i, (255, 0, 0))
-            led_controller.set_switchboard_color(4 - i + 5, (255, 0, 0))
+        self._draw_leds()
 
         decay = dt * self.LED_DECAY_RATE
         self._led_level = max(self._led_level - decay, 0)
 
     def exit(self):
         self.device.display_controller.main_group.remove(self._label_group)
+
+    def _draw_leds(self):
+        led_controller = self.device.led_controller
+
+        top_led = map_range(self._led_level, 0, self.LED_MAX_LEVEL, 0, 5)
+
+        led_controller.fill_switchboard_color((0, 0, 0))
+
+        for i in range(0, top_led):
+            led_controller.set_switchboard_color(4 - i, (255, 0, 0))
+            led_controller.set_switchboard_color(4 - i + 5, (255, 0, 0))        
